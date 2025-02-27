@@ -350,205 +350,145 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🌿 ระบบจัดการโภชนาการสำหรับผู้ป่วย 🩺</h1>
-      <nav>
-        <a href="index.html">หน้าหลัก</a>
-        <a href="patients.html" class="active">รายชื่อผู้ป่วย</a>
-        <a href="nutrition.html">ข้อมูลโภชนาการ</a>
-      </nav>
-    </header>
-
-    <div class="search-container">
-      <input type="text" id="search-input" placeholder="ค้นหาผู้ป่วยตามชื่อหรือโรค...">
-      <button onclick="searchPatients()">ค้นหา</button>
-    </div>
-
-    <!-- โรคเกี่ยวกับระบบเมตาบอลิซึม -->
-    <div class="category-section">
-      <div class="category-header">
-        <h2 class="category-title">
-          <span class="category-icon">🩸</span> โรคเกี่ยวกับระบบเมตาบอลิซึม
-          <span id="metabolism-count" class="patient-count">6</span>
-        </h2>
+ 
+  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ</title>
+    <!-- คงไว้ซึ่ง CSS เดิมทั้งหมด -->
+</head>
+<body>
+    <div class="simple-nav">
         <div>
-          <button class="button secondary-button" onclick="toggleCategory('metabolism-patients')">แสดง/ซ่อน</button>
+            <a href="index.html">หน้าหลัก</a>
+            <a href="Membership.html">สมัครสมาชิก</a>
+            <a href="Register Form.html">เข้าสู่ระบบ</a>
         </div>
-      </div>
-      <div class="patient-cards" id="metabolism-patients">
-        <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
-      </div>
     </div>
 
-    <!-- โรคเกี่ยวกับระบบหัวใจและหลอดเลือด -->
-    <div class="category-section">
-      <div class="category-header">
-        <h2 class="category-title">
-          <span class="category-icon">❤️</span> โรคเกี่ยวกับระบบหัวใจและหลอดเลือด
-          <span id="cardiovascular-count" class="patient-count">6</span>
-        </h2>
-        <div>
-          <button class="button secondary-button" onclick="toggleCategory('cardiovascular-patients')">แสดง/ซ่อน</button>
-        </div>
-      </div>
-      <div class="patient-cards" id="cardiovascular-patients">
-        <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
-      </div>
-    </div>
-
-    <!-- โรคเกี่ยวกับระบบทางเดินหายใจ -->
-    <div class="category-section">
-      <div class="category-header">
-        <h2 class="category-title">
-          <span class="category-icon">🫁</span> โรคเกี่ยวกับระบบทางเดินหายใจ
-          <span id="respiratory-count" class="patient-count">6</span>
-        </h2>
-        <div>
-          <button class="button secondary-button" onclick="toggleCategory('respiratory-patients')">แสดง/ซ่อน</button>
-        </div>
-      </div>
-      <div class="patient-cards" id="respiratory-patients">
-        <!-- ข้อมูลจะถูกเพิ่มด้วย JavaScript -->
-      </div>
-    </div>
-
-    <footer>
-      &copy; 2025 ระบบจัดการโภชนาการสำหรับผู้ป่วย | พัฒนาโดย ทีมโภชนาการ
-    </footer>
-  </div>
-
-  <script>
-    // ข้อมูลโรคในแต่ละหมวดหมู่
-    const diseaseCategories = {
-      metabolism: ['โรคเบาหวาน', 'โรคไขมันในเลือดสูง', 'โรคอ้วน', 'โรคเกาต์', 'โรคไทรอยด์', 'โรคเมตาบอลิกซินโดรม'],
-      cardiovascular: ['โรคความดันโลหิตสูง', 'โรคหัวใจ', 'โรคหลอดเลือดสมอง', 'โรคหลอดเลือดหัวใจ', 'โรคลิ้นหัวใจ', 'โรคหัวใจเต้นผิดจังหวะ'],
-      respiratory: ['โรคหอบหืด', 'โรคปอดอุดกั้นเรื้อรัง', 'โรคภูมิแพ้', 'โรคถุงลมโป่งพอง', 'โรคปอดอักเสบ', 'โรคหลอดลมอักเสบเรื้อรัง']
-    };
-    
-    // ข้อมูลผู้ป่วยตัวอย่าง
-    const samplePatients = {
-      metabolism: [
-        { id: 1, name: 'คุณสมชาย วิชัยดิษฐ์', disease: 'โรคเบาหวาน' },
-        { id: 4, name: 'คุณวิชัย สุขสมบูรณ์', disease: 'โรคไขมันในเลือดสูง' },
-        { id: 7, name: 'คุณรัชดา จิตรโสภา', disease: 'โรคอ้วน' },
-        { id: 10, name: 'คุณสุนทร ภักดีวงศ์', disease: 'โรคเกาต์' },
-        { id: 13, name: 'คุณสุพรรณี วิเศษชัย', disease: 'โรคไทรอยด์' },
-        { id: 16, name: 'คุณไพบูลย์ นิลพัฒน์', disease: 'โรคเมตาบอลิกซินโดรม' }
-      ],
-      cardiovascular: [
-        { id: 2, name: 'คุณสมหญิง รักษ์ไทย', disease: 'โรคความดันโลหิตสูง' },
-        { id: 5, name: 'คุณนารี สุนทรภู่', disease: 'โรคหัวใจ' },
-        { id: 8, name: 'คุณประสิทธิ์ มั่นคง', disease: 'โรคหลอดเลือดสมอง' },
-        { id: 11, name: 'คุณวิเชียร ชาญชัย', disease: 'โรคหลอดเลือดหัวใจ' },
-        { id: 14, name: 'คุณศิริลักษณ์ ดวงแก้ว', disease: 'โรคลิ้นหัวใจ' },
-        { id: 17, name: 'คุณสุพจน์ นวลจันทร์', disease: 'โรคหัวใจเต้นผิดจังหวะ' }
-      ],
-      respiratory: [
-        { id: 3, name: 'คุณชาญชัย มีชัย', disease: 'โรคหอบหืด' },
-        { id: 6, name: 'คุณธนิช ชูเกียรติ', disease: 'โรคภูมิแพ้' },
-        { id: 9, name: 'คุณมาลี ดวงดี', disease: 'โรคปอดอุดกั้นเรื้อรัง' },
-        { id: 12, name: 'คุณอำนวย สุขสันต์', disease: 'โรคถุงลมโป่งพอง' },
-        { id: 15, name: 'คุณนิภา จารุพงศ์', disease: 'โรคปอดอักเสบ' },
-        { id: 18, name: 'คุณสมศักดิ์ ศรีวิลัย', disease: 'โรคหลอดลมอักเสบเรื้อรัง' }
-      ]
-    };
-
-    // แสดงรายชื่อผู้ป่วย
-    function renderPatients() {
-      renderPatientCategory('metabolism', samplePatients.metabolism, '🩸');
-      renderPatientCategory('cardiovascular', samplePatients.cardiovascular, '❤️');
-      renderPatientCategory('respiratory', samplePatients.respiratory, '🫁');
-    }
-
-    // แสดงผู้ป่วยในแต่ละหมวดหมู่
-    function renderPatientCategory(category, patients, emoji) {
-      const container = document.getElementById(`${category}-patients`);
-      container.innerHTML = '';
-
-      if (patients.length === 0) {
-        container.innerHTML = '<div class="empty-category">ไม่พบข้อมูลผู้ป่วยในกลุ่มนี้</div>';
-        return;
-      }
-
-      patients.forEach(patient => {
-        const isActive = patient.id % 2 === 0;
-        const card = document.createElement('div');
-        card.className = 'patient-card';
-        
-        card.innerHTML = `
-          <a href="nutrition.html?id=${patient.id}">
-            <div class="patient-info">
-              <div class="patient-name">${patient.name}</div>
-              <div class="patient-disease">${emoji} ${patient.disease}</div>
+    <div class="container">
+        <div class="card">
+            <h1>เข้าสู่ระบบ</h1>
+            
+            <div class="avatar">
+                <i class="far fa-circle smile-icon"></i>
+                <i class="fas fa-plus plus-icon"></i>
             </div>
-            <span class="status-badge ${isActive ? 'status-active' : 'status-pending'}">
-              ${isActive ? 'กำลังรักษา' : 'รอการประเมิน'}
-            </span>
-          </a>
-        `;
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="input-icon fas fa-user"></i>
+                    <input type="text" id="username" placeholder="ชื่อผู้ใช้">
+                </div>
+                
+                <div class="input-group">
+                    <i class="input-icon fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="รหัสผ่าน">
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i id="toggleIcon" class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+                
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">จดจำฉันไว้ในระบบ</label>
+                </div>
+                
+                <div class="login-buttons">
+                    <button type="button" class="btn-login" onclick="login()">เข้าสู่ระบบ</button>
+                    <button type="button" class="btn-cancel" onclick="cancelLogin()">ยกเลิก</button>
+                </div>
+            </form>
+            
+            <a href="Membership.html" class="register-link">สมัครสมาชิก</a>
+        </div>
+    </div>
+
+    <!-- โหลด config.js ก่อน -->
+    <script src="config.js"></script>
+    
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username.trim() === '' || password.trim() === '') {
+                alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+                return;
+            }
+            
+            // เรียกใช้ API สำหรับเข้าสู่ระบบ
+            fetch(getEndpoint('/login'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('เข้าสู่ระบบไม่สำเร็จ');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('เข้าสู่ระบบสำเร็จ!');
+                
+                // เก็บข้อมูลผู้ใช้ใน localStorage หากเลือก "จดจำฉันไว้ในระบบ"
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('user', JSON.stringify(data));
+                }
+                
+                // นำทางไปยังหน้าหลัก
+                window.location.href = 'index.html';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            });
+        }
         
-        container.appendChild(card);
-      });
+        function cancelLogin() {
+            document.getElementById('loginForm').reset();
+            window.location.href = 'index.html';
+        }
+        
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+        
+        // ตรวจสอบว่ามีการจดจำผู้ใช้ไว้แล้วหรือไม่
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                try {
+                    // อาจแสดงข้อความว่าเข้าสู่ระบบอัตโนมัติ หรือกรอกชื่อผู้ใช้อัตโนมัติ
+                    const user = JSON.parse(savedUser);
+                    document.getElementById('username').value = user.username || '';
+                    document.getElementById('rememberMe').checked = true;
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                }
+            }
+        });
+    </script>
 
-      // อัปเดตจำนวนผู้ป่วย
-      document.getElementById(`${category}-count`).textContent = patients.length;
-    }
-
-    // แสดง/ซ่อนหมวดหมู่
-    function toggleCategory(containerId) {
-      const container = document.getElementById(containerId);
-      container.style.display = container.style.display === 'none' ? 'grid' : 'none';
-    }
-
-    // ค้นหาผู้ป่วย
-    function searchPatients() {
-      const searchTerm = document.getElementById('search-input').value.toLowerCase();
-      
-      if (!searchTerm) {
-        renderPatients();
-        return;
-      }
-      
-      // กรองผู้ป่วยตามคำค้นหา
-      const filteredMetabolism = samplePatients.metabolism.filter(patient => 
-        patient.name.toLowerCase().includes(searchTerm) || 
-        patient.disease.toLowerCase().includes(searchTerm)
-      );
-      
-      const filteredCardiovascular = samplePatients.cardiovascular.filter(patient => 
-        patient.name.toLowerCase().includes(searchTerm) || 
-        patient.disease.toLowerCase().includes(searchTerm)
-      );
-      
-      const filteredRespiratory = samplePatients.respiratory.filter(patient => 
-        patient.name.toLowerCase().includes(searchTerm) || 
-        patient.disease.toLowerCase().includes(searchTerm)
-      );
-      
-      // แสดงผลการค้นหา
-      renderPatientCategory('metabolism', filteredMetabolism, '🩸');
-      renderPatientCategory('cardiovascular', filteredCardiovascular, '❤️');
-      renderPatientCategory('respiratory', filteredRespiratory, '🫁');
-    }
-
-    // เพิ่ม event listener สำหรับการค้นหาด้วย Enter
-    document.getElementById('search-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        searchPatients();
-      }
-    });
-
-    // โหลดข้อมูลเมื่อโหลดหน้าเสร็จ
-    document.addEventListener('DOMContentLoaded', function() {
-      renderPatients();
-    });
-  </script>
-
-  <!-- โหลด config.js ก่อน -->
-<script src="config.js"></script>
-<!-- จากนั้นจึงโหลดไฟล์ JS อื่นๆ -->
-<script src="patient-storage.js"></script>
-<script src="edit-patient.js"></script>
+    <!-- Adding Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <!-- Adding Thai fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
 </body>
 </html>
