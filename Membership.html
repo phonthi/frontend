@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก</title>
+    <style>
+        body {
+            font-family: 'Kanit', 'Prompt', sans-serif;
+            background-color: #e8f5e9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .simple-nav {
+            background-color: #f8f8f8;
+            padding: 15px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .simple-nav a {
+            color: #4caf50;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 16px;
+        }
+        
+        .simple-nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #4caf50;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 26px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            background-color: #f1f8e9;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            color: #333;
+        }
+        
+        input:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+        
+        .error {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        .btn-register, .btn-cancel {
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 48%;
+        }
+        
+        .btn-register {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .btn-cancel {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-register:disabled {
+            background-color: #a5d6a7;
+            cursor: not-allowed;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 36px;
+            color: #7c7c7c;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 16px;
+        }
+        
+        .password-toggle:hover {
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="simple-nav">
+        <div>
+            <a href="index.html">หน้าหลัก</a>
+            <a href="Membership.html">สมัครสมาชิก</a>
+            <a href="Register Form.html">เข้าสู่ระบบ</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+        <h1>สมัครสมาชิก</h1>
+        
+        <form id="registerForm" novalidate>
+            <div class="input-group">
+                <label for="fullname">ชื่อ-นามสกุล</label>
+                <input type="text" id="fullname" name="fullname" placeholder="ชื่อ-นามสกุล" required>
+                <div class="error" id="fullnameError"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="username">ชื่อผู้ใช้</label>
+                <input type="text" id="username" name="username" placeholder="ชื่อผู้ใช้" required>
+                <div class="error" id="usernameError"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="email">อีเมล</label>
+                <input type="email" id="email" name="email" placeholder="อีเมล" required>
+                <div class="error" id="emailError"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">รหัสผ่าน</label>
+                <input type="password" id="password" name="password" placeholder="รหัสผ่าน" required>
+                <button type="button" class="password-toggle" onclick="togglePassword('password', 'toggleIcon1')">
+                    <i id="toggleIcon1" class="fas fa-eye-slash"></i>
+                </button>
+                <div class="error" id="passwordError"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="confirmPassword">ยืนยันรหัสผ่าน</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', 'toggleIcon2')">
+                    <i id="toggleIcon2" class="fas fa-eye-slash"></i>
+                </button>
+                <div class="error" id="confirmPasswordError"></div>
+            </div>
+            
+            <div class="buttons">
+                <button type="submit" class="btn-register" id="submitButton">สมัครสมาชิก</button>
+                <button type="button" class="btn-cancel" onclick="cancelForm()">ยกเลิก</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // ป้องกันการ submit จริง
+
+            let isValid = validateForm();
+
+            if (isValid) {
+                alert('สมัครสมาชิกสำเร็จ! 🎉');
+                this.reset();
+                window.location.href = 'Register Form.html'; // ไปยังหน้าเข้าสู่ระบบ
+            }
+        });
+
+        function validateForm() {
+            let fullname = document.getElementById('fullname').value.trim();
+            let username = document.getElementById('username').value.trim();
+            let email = document.getElementById('email').value.trim();
+            let password = document.getElementById('password').value.trim();
+            let confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            let isValid = true;
+
+            // ล้าง error เดิม
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            if (fullname === '') {
+                document.getElementById('fullnameError').textContent = 'กรุณากรอกชื่อ-นามสกุล';
+                isValid = false;
+            }
+
+            if (username === '') {
+                document.getElementById('usernameError').textContent = 'กรุณากรอกชื่อผู้ใช้';
+                isValid = false;
+            }
+
+            if (email === '') {
+                document.getElementById('emailError').textContent = 'กรุณากรอกอีเมล';
+                isValid = false;
+            } else if (!/\S+@\S+\.\S+/.test(email)) {
+                document.getElementById('emailError').textContent = 'รูปแบบอีเมลไม่ถูกต้อง';
+                isValid = false;
+            }
+
+            if (password === '') {
+                document.getElementById('passwordError').textContent = 'กรุณากรอกรหัสผ่าน';
+                isValid = false;
+            } else if (password.length < 6) {
+                document.getElementById('passwordError').textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+                isValid = false;
+            }
+
+            if (confirmPassword !== password) {
+                document.getElementById('confirmPasswordError').textContent = 'รหัสผ่านไม่ตรงกัน';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function cancelForm() {
+            if (confirm('คุณต้องการยกเลิกการสมัครสมาชิกหรือไม่?')) {
+                document.getElementById('registerForm').reset(); // ล้างข้อมูล
+                window.location.href = 'index.html'; // กลับหน้าหลัก
+            }
+        }
+        
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.getElementById(iconId);
+            
+            if (passwordInput.type === 'password') {
+                // เปลี่ยนจากการซ่อนเป็นการแสดงรหัสผ่าน
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                // เปลี่ยนจากการแสดงเป็นการซ่อนรหัสผ่าน
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+    
+    <!-- Adding Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <!-- Adding Thai fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+</body>
+</html>

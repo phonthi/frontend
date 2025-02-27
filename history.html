@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจัดการโภชนาการสำหรับผู้ป่วย</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+  <!-- เพิ่มไอคอนจาก Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #e8f5e9; /* พื้นหลังสีเขียวอ่อน */
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 25px;
+    }
+    
+    h1 {
+      color: white;
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    nav {
+      margin-top: 18px;
+    }
+    nav a {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 10px 16px;
+      color: #333;
+      text-decoration: none;
+      border-radius: 25px;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    nav a:hover {
+      background-color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    nav a.active {
+      background-color: #1b5e20;
+      color: white;
+    }
+    .search-container {
+      margin-bottom: 25px;
+      display: flex;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-radius: 30px;
+      overflow: hidden;
+    }
+    .search-container input {
+      flex: 1;
+      padding: 15px 20px;
+      border: none;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 16px;
+    }
+    .search-container input:focus {
+      outline: none;
+    }
+    .search-container button {
+      padding: 15px 25px;
+      background-color: #43a047;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .search-container button:hover {
+      background-color: #2e7d32;
+    }
+    .category-section {
+      background-color: white;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+    .category-section:hover {
+      transform: translateY(-3px);
+    }
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .category-title {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #2e7d32;
+      margin: 0;
+    }
+    .category-icon {
+      margin-right: 12px;
+      font-size: 26px;
+    }
+    .patient-count {
+      background-color: #e8f5e9;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 15px;
+      color: #2e7d32;
+      margin-left: 12px;
+      font-weight: 600;
+    }
+    .patient-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .patient-card {
+      background-color: #f5f5f5;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 5px solid #43a047;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .patient-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      background-color: #f9f9f9;
+    }
+    .patient-card a {
+      display: flex;
+      justify-content: space-between;
+      text-decoration: none;
+      color: #333;
+    }
+    .patient-info {
+      flex: 1;
+    }
+    .patient-name {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+    .patient-disease {
+      color: #555;
+      font-size: 15px;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .status-active {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #2e7d32;
+    }
+    .status-pending {
+      background-color: #fff8e1;
+      color: #ff8f00;
+      border: 1px solid #ff8f00;
+    }
+    .button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #43a047;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #2e7d32;
+      transform: translateY(-2px);
+    }
+    .secondary-button {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #2e7d32;
+    }
+    .secondary-button:hover {
+      background-color: #c8e6c9;
+      transform: translateY(-2px);
+    }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #e8f5e9; /* เปลี่ยนพื้นหลังเป็นสีเขียวอ่อน */
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background-color: #81c784; /* เปลี่ยน header เป็นสีเขียวอ่อน */
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+      z-index: 1;
+    }
+    h1 {
+      color: #1b5e20;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    nav {
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    nav a {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 12px 20px;
+      color: #1b5e20;
+      text-decoration: none;
+      border-radius: 30px;
+      background-color: rgba(255,255,255,0.7);
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    nav a:hover, nav a.active {
+      background-color: #4CAF50;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px solid #4CAF50;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    .stat-icon {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+    .stat-label {
+      color: #555;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    .content-section {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      border-left: 5px solid #4CAF50;
+    }
+    .content-section h2 {
+      color: #2e7d32;
+      border-bottom: 2px solid #e8f5e9;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+    .content-section ul li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 14px;
+      background-color: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+    /* CSS เฉพาะสำหรับหน้าแก้ไขข้อมูลผู้ป่วย */
+    .patient-form-container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 100, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .patient-form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    }
+    
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -15px;
+    }
+    
+    .form-column {
+      flex: 1;
+      padding: 0 15px;
+      min-width: 250px;
+    }
+    
+    .profile-image-container {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+      position: relative;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #E8F5E9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #C8E6C9;
+    }
+    
+    .profile-image {
+      font-size: 80px;
+      color: #4CAF50;
+    }
+    
+    .profile-image-upload {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(76, 175, 80, 0.8);
+      color: white;
+      text-align: center;
+      padding: 8px 0;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2E7D32;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #C8E6C9;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+      outline: none;
+    }
+    
+    .form-section-title {
+      font-size: 18px;
+      color: #2E7D32;
+      margin: 30px 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E8F5E9;
+    }
+    
+    .form-section-title i {
+      margin-right: 10px;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 30px;
+      gap: 15px;
+    }
+    
+    .info-card {
+      background: linear-gradient(145deg, #f0fff0, #e1f5e1);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .info-card-title {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      color: #2E7D32;
+      margin-bottom: 10px;
+    }
+    
+    .info-card-title i {
+      margin-right: 10px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+    
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #C8E6C9;
+      margin-bottom: 25px;
+    }
+    
+    .tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      color: #555;
+      font-weight: 600;
+      position: relative;
+    }
+    
+    .tab.active {
+      color: #4CAF50;
+    }
+    
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: #4CAF50;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    @media (max-width: 768px) {
+      .form-column {
+        flex: 100%;
+        margin-bottom: 20px;
+      }
+    }
+    .loading, .empty-category {
+      padding: 25px;
+      text-align: center;
+      color: #666;
+      font-style: italic;
+    }
+    
+    /* เพิ่ม animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .patient-card {
+      animation: fadeIn 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+    
+    .patient-card:nth-child(1) { animation-delay: 0.1s; }
+    .patient-card:nth-child(2) { animation-delay: 0.2s; }
+    .patient-card:nth-child(3) { animation-delay: 0.3s; }
+    .patient-card:nth-child(4) { animation-delay: 0.4s; }
+    .patient-card:nth-child(5) { animation-delay: 0.5s; }
+    .patient-card:nth-child(6) { animation-delay: 0.6s; }
+    
+    /* เพิ่มสไตล์สำหรับปุ่มเมื่อกำลังโหลด */
+    .button.loading {
+      opacity: 0.7;
+      cursor: wait;
+      pointer-events: none;
+    }
+    
+    /* เพิ่มเอฟเฟกต์เมื่อบันทึกสำเร็จ */
+    .save-success {
+      animation: highlight 1s ease-out;
+    }
+    
+    @keyframes highlight {
+      0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.5); }
+      70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+    }
+    
+    /* เพิ่ม class สำหรับการ์ดที่ถูกเลือก */
+    .patient-card.selected {
+      background-color: #e8f5e9;
+      border-left: 5px solid #2e7d32;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌿 ระบบจัดการโภชนาการสำหรับผู้ป่วย 🩺</h1>
+      <nav>
+        <a href="index.html">หน้าหลัก</a>
+        <a href="patients.html">รายชื่อผู้ป่วย</a>
+        <a href="nutrition.html">ข้อมูลโภชนาการ</a>
+        <a href="history.html" class="active"><i class="fas fa-user-edit"></i> แก้ไขข้อมูลผู้ป่วย</a>
+      </nav>
+    </header>
+
+    <div class="section">
+      <h3><i class="fas fa-user-edit"></i> แก้ไขข้อมูลผู้ป่วย</h3>
+      
+      <!-- เลือกผู้ป่วยที่ต้องการแก้ไข -->
+      <div class="search-box">
+        <div class="search-container">
+          <input type="text" id="patient-search" placeholder="ค้นหาผู้ป่วยที่ต้องการแก้ไข..." onkeyup="filterPatients()">
+        </div>
+      </div>
+      
+      <!-- รายการผู้ป่วยแบบการ์ด -->
+      <div class="patient-list" id="patient-list">
+        <!-- การ์ดผู้ป่วยจะถูกเพิ่มด้วย JavaScript -->
+      </div>
+    </div>
+    
+    <!-- แบบฟอร์มแก้ไขข้อมูลผู้ป่วย -->
+    <div class="patient-form-container" id="patient-form" style="display: none;">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('personal-info')">ข้อมูลส่วนตัว</div>
+        <div class="tab" onclick="switchTab('medical-info')">ข้อมูลทางการแพทย์</div>
+        <div class="tab" onclick="switchTab('diet-info')">ข้อมูลโภชนาการ</div>
+      </div>
+      
+      <!-- แท็บข้อมูลส่วนตัว -->
+      <div class="tab-content active" id="personal-info">
+        <div class="form-row">
+          <div class="form-column">
+            <div class="profile-image-container">
+              <div class="profile-image">👤</div>
+              <div class="profile-image-upload">
+                <i class="fas fa-camera"></i> อัปโหลดรูป
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="patient-id">รหัสผู้ป่วย</label>
+              <input type="text" id="patient-id" class="form-control" readonly>
+            </div>
+            
+            <div class="form-group">
+              <label for="entry-date">วันที่เข้ารับการรักษา</label>
+              <input type="date" id="entry-date" class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label for="prefix">คำนำหน้า</label>
+              <select id="prefix" class="form-control">
+                <option value="นาย">นาย</option>
+                <option value="นาง">นาง</option>
+                <option value="นางสาว">นางสาว</option>
+                <option value="เด็กชาย">เด็กชาย</option>
+                <option value="เด็กหญิง">เด็กหญิง</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="firstname">ชื่อ</label>
+              <input type="text" id="firstname" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="lastname">นามสกุล</label>
+              <input type="text" id="lastname" class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label for="birth-date">วันเดือนปีเกิด</label>
+              <input type="date" id="birth-date" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="age">อายุ (ปี)</label>
+              <input type="number" id="age" class="form-control" readonly>
+            </div>
+            
+            <div class="form-group">
+              <label for="gender">เพศ</label>
+              <div class="radio-group">
+                <div class="radio-item">
+                  <input type="radio" id="gender-male" name="gender" value="male">
+                  <label for="gender-male">ชาย</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="gender-female" name="gender" value="female">
+                  <label for="gender-female">หญิง</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section-title"><i class="fas fa-address-card"></i> ข้อมูลติดต่อ</div>
+        
+        <div class="form-row">
+          <div class="form-column">
+            <div class="form-group">
+              <label for="phone">เบอร์โทรศัพท์</label>
+              <input type="tel" id="phone" class="form-control" placeholder="0xx-xxx-xxxx">
+            </div>
+            
+            <div class="form-group">
+              <label for="email">อีเมล</label>
+              <input type="email" id="email" class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label for="address">ที่อยู่</label>
+              <textarea id="address" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="emergency-contact">ผู้ติดต่อฉุกเฉิน</label>
+              <input type="text" id="emergency-contact" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- แท็บข้อมูลทางการแพทย์ -->
+      <div class="tab-content" id="medical-info">
+        <div class="form-row">
+          <div class="form-column">
+            <div class="form-group">
+              <label for="height">ส่วนสูง (ซม.)</label>
+              <input type="number" id="height" class="form-control" step="0.1">
+            </div>
+            
+            <div class="form-group">
+              <label for="weight">น้ำหนัก (กก.)</label>
+              <input type="number" id="weight" class="form-control" step="0.1">
+            </div>
+            
+            <div class="form-group">
+              <label for="bmi">ดัชนีมวลกาย (BMI)</label>
+              <input type="number" id="bmi" class="form-control" readonly>
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label for="blood-type">หมู่เลือด</label>
+              <select id="blood-type" class="form-control">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="AB">AB</option>
+                <option value="O">O</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="blood-pressure">ความดันโลหิต (mmHg)</label>
+              <input type="text" id="blood-pressure" class="form-control" placeholder="120/80">
+            </div>
+            
+            <div class="form-group">
+              <label for="heart-rate">อัตราการเต้นหัวใจ (ครั้ง/นาที)</label>
+              <input type="number" id="heart-rate" class="form-control">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section-title"><i class="fas fa-notes-medical"></i> ประวัติการรักษา</div>
+        
+        <div class="form-row">
+          <div class="form-column">
+            <div class="form-group">
+              <label for="disease">โรคปัจจุบัน</label>
+              <input type="text" id="disease" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="disease-category">ประเภทโรค</label>
+              <select id="disease-category" class="form-control">
+                <option value="metabolism">โรคเมตาบอลิซึม</option>
+                <option value="cardiovascular">โรคหัวใจและหลอดเลือด</option>
+                <option value="respiratory">โรคระบบทางเดินหายใจ</option>
+                <option value="digestive">โรคระบบทางเดินอาหาร</option>
+                <option value="other">อื่นๆ</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label>โรคประจำตัว</label>
+              <div class="checkbox-group">
+                <div class="checkbox-item">
+                  <input type="checkbox" id="disease-diabetes" name="underlying-disease" value="diabetes">
+                  <label for="disease-diabetes">เบาหวาน</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="disease-hypertension" name="underlying-disease" value="hypertension">
+                  <label for="disease-hypertension">ความดันโลหิตสูง</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="disease-heart" name="underlying-disease" value="heart">
+                  <label for="disease-heart">โรคหัวใจ</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="disease-allergy" name="underlying-disease" value="allergy">
+                  <label for="disease-allergy">ภูมิแพ้</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="medication">ยาที่ใช้ประจำ</label>
+              <textarea id="medication" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="medical-history">ประวัติการรักษาเพิ่มเติม</label>
+          <textarea id="medical-history" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      
+      <!-- แท็บข้อมูลโภชนาการ -->
+      <div class="tab-content" id="diet-info">
+        <div class="info-card">
+          <div class="info-card-title"><i class="fas fa-info-circle"></i> คำแนะนำ</div>
+          <p>ข้อมูลในส่วนนี้จะช่วยในการวิเคราะห์และให้คำแนะนำด้านโภชนาการที่เหมาะสมสำหรับผู้ป่วย</p>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-column">
+            <div class="form-group">
+              <label>ข้อจำกัดด้านอาหาร</label>
+              <div class="checkbox-group">
+                <div class="checkbox-item">
+                  <input type="checkbox" id="allergy-gluten" name="food-restrictions" value="gluten">
+                  <label for="allergy-gluten">แพ้กลูเตน</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="allergy-dairy" name="food-restrictions" value="dairy">
+                  <label for="allergy-dairy">แพ้นม</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="allergy-peanut" name="food-restrictions" value="peanut">
+                  <label for="allergy-peanut">แพ้ถั่ว</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="allergy-seafood" name="food-restrictions" value="seafood">
+                  <label for="allergy-seafood">แพ้อาหารทะเล</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="vegetarian" name="food-restrictions" value="vegetarian">
+                  <label for="vegetarian">มังสวิรัติ</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="other-allergies">อาหารที่แพ้อื่นๆ</label>
+              <textarea id="other-allergies" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label for="activity-level">ระดับกิจกรรมทางกาย</label>
+              <select id="activity-level" class="form-control">
+                <option value="sedentary">นั่งเป็นส่วนใหญ่</option>
+                <option value="light">กิจกรรมเบา (1-2 วัน/สัปดาห์)</option>
+                <option value="moderate">กิจกรรมปานกลาง (3-5 วัน/สัปดาห์)</option>
+                <option value="active">กิจกรรมหนัก (6-7 วัน/สัปดาห์)</option>
+                <option value="very-active">กิจกรรมหนักมาก (2 ครั้ง/วัน)</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="meal-frequency">จำนวนมื้ออาหารต่อวัน</label>
+              <select id="meal-frequency" class="form-control">
+                <option value="2">2 มื้อ</option>
+                <option value="3" selected>3 มื้อ</option>
+                <option value="4">4 มื้อ</option>
+                <option value="5">5 มื้อ</option>
+                <option value="6">6 มื้อ</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section-title"><i class="fas fa-utensils"></i> เป้าหมายโภชนาการ</div>
+        
+        <div class="form-row">
+          <div class="form-column">
+            <div class="form-group">
+              <label for="target-weight">น้ำหนักเป้าหมาย (กก.)</label>
+              <input type="number" id="target-weight" class="form-control" step="0.1">
+            </div>
+            
+            <div class="form-group">
+              <label for="weight-goal">เป้าหมายน้ำหนัก</label>
+              <select id="weight-goal" class="form-control">
+                <option value="lose">ลดน้ำหนัก</option>
+                <option value="maintain">รักษาน้ำหนัก</option>
+                <option value="gain">เพิ่มน้ำหนัก</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-column">
+            <div class="form-group">
+              <label for="diet-preference">ประเภทอาหารที่ชอบ</label>
+              <textarea id="diet-preference" class="form-control" rows="2"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="diet-notes">หมายเหตุเพิ่มเติมด้านโภชนาการ</label>
+              <textarea id="diet-notes" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ปุ่มดำเนินการ -->
+      <div class="form-actions">
+        <button class="button secondary-button" id="cancel-button">
+          <i class="fas fa-times"></i> ยกเลิก
+        </button>
+        <button class="button primary-button" id="save-button">
+          <i class="fas fa-save"></i> บันทึกข้อมูล
+        </button>
+      </div>
+    </div>
+    
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 ระบบจัดการโภชนาการสำหรับผู้ป่วย | พัฒนาโดย ทีมโภชนาการ</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-line"></i></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- โหลด patient-storage.js ก่อนเพื่อให้ฟังก์ชันพร้อมใช้งาน -->
+  <script src="patient-storage.js"></script>
+  <!-- จากนั้นจึงโหลด edit-patient.js ที่จะใช้ฟังก์ชันจาก patient-storage.js -->
+  <script src="edit-patient.js"></script>
+</body>
+</html>

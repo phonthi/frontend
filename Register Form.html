@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ</title>
+    <style>
+        body {
+            font-family: 'Kanit', 'Prompt', sans-serif;
+            background-color: #e8f5e9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .simple-nav {
+            background-color: #f8f8f8;
+            padding: 15px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .simple-nav a {
+            color: #4caf50;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 16px;
+        }
+        
+        .simple-nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 350px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #4caf50;
+            margin-bottom: 20px;
+            font-weight: 500;
+            font-size: 24px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background-color: #f1f8e9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .smile-icon {
+            color: #4caf50;
+            font-size: 34px;
+        }
+        
+        .plus-icon {
+            position: absolute;
+            color: #4caf50;
+            font-size: 18px;
+            top: 26px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: none;
+            background-color: #f1f8e9;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            color: #333;
+        }
+        
+        input::placeholder {
+            color: #7c7c7c;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7c7c7c;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7c7c7c;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 16px;
+        }
+        
+        .password-toggle:hover {
+            color: #4caf50;
+        }
+        
+        .login-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .btn-login, .btn-cancel {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 0;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .btn-login {
+            background-color: #6bbf5f;
+            color: white;
+        }
+        
+        .btn-cancel {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .register-link {
+            color: #4caf50;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .remember-me input {
+            width: auto;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="simple-nav">
+        <div>
+            <a href="index.html">หน้าหลัก</a>
+            <a href="Membership.html">สมัครสมาชิก</a>
+            <a href="Register Form.html">เข้าสู่ระบบ</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h1>เข้าสู่ระบบ</h1>
+            
+            <div class="avatar">
+                <!-- ใช้แบบซ้อนกันของไอคอนเพื่อสร้างโลโก้ที่มีเครื่องหมายบวกซ้อนบนหน้ายิ้ม -->
+                <i class="far fa-circle smile-icon"></i>
+                <i class="fas fa-plus plus-icon"></i>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="input-icon fas fa-user"></i>
+                    <input type="text" id="username" placeholder="ชื่อผู้ใช้">
+                </div>
+                
+                <div class="input-group">
+                    <i class="input-icon fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="รหัสผ่าน">
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i id="toggleIcon" class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+                
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">จดจำฉันไว้ในระบบ</label>
+                </div>
+                
+                <div class="login-buttons">
+                    <button type="button" class="btn-login" onclick="login()">เข้าสู่ระบบ</button>
+                    <button type="button" class="btn-cancel" onclick="cancelLogin()">ยกเลิก</button>
+                </div>
+            </form>
+            
+            <a href="Membership.html" class="register-link">สมัครสมาชิก</a>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username.trim() === '' || password.trim() === '') {
+                alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+                return;
+            }
+            
+            alert('เข้าสู่ระบบสำเร็จ!');
+            window.location.href = 'index.html';
+        }
+        
+        function cancelLogin() {
+            document.getElementById('loginForm').reset();
+            window.location.href = 'index.html';
+        }
+        
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                // เปลี่ยนจากการซ่อนเป็นการแสดงรหัสผ่าน
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                // เปลี่ยนจากการแสดงเป็นการซ่อนรหัสผ่าน
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+
+    <!-- Adding Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <!-- Adding Thai fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+</body>
+</html>
